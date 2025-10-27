@@ -1,0 +1,18 @@
+# Node
+node_modules/
+pnpm-lock.yaml
+
+# Build artifacts
+dist/
+build/
+.tsup/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,27 @@
+# Branch name validation
+current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+
+# Skip validation for main/master branches
+if [ "$current_branch" != "main" ] && [ "$current_branch" != "master" ]; then
+    branch_pattern='^(feat|fix|hotfix|bugfix|chore|docs|style|refactor|perf|test|build|ci|release)\/[a-z0-9]+(?:[-_][a-z0-9]+)*$'
+    
+    if ! echo "$current_branch" | grep -qE "$branch_pattern"; then
+        echo "❌ Error: Invalid branch name format!"
+        echo ""
+        echo "📝 Your branch name should follow this format:"
+        echo "   <type>/<description>"
+        echo ""
+        echo "🔧 Types: feat, fix, hotfix, bugfix, chore, docs, style, refactor, perf, test, build, ci, release"
+        echo ""
+        echo "✅ Examples:"
+        echo "   feat/parser-add-url-extraction"
+        echo "   fix/resolve-memory-leak"
+        echo "   docs/update-readme"
+        echo "   chore/add-husky-hooks"
+        echo ""
+        exit 1
+    fi
+fi
+
+# Run lint-staged to lint, format, and check staged files
+pnpm dlx lint-staged

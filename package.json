@@ -1,0 +1,54 @@
+{
+  "name": "url-parser-cli",
+  "version": "0.1.0",
+  "description": "A Node.js CLI to parse, fetch, and process URLs from a text file or stdin.",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "parse-urls": "./dist/index.mjs"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "prepublishOnly": "npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "format": "biome format --write .",
+    "lint": "biome lint .",
+    "check": "biome check --write .",
+    "start": "node dist/index.mjs",
+    "prepare": "husky",
+    "release": "standard-version",
+    "release:minor": "standard-version --release-as minor",
+    "release:major": "standard-version --release-as major",
+    "release:patch": "standard-version --release-as patch"
+  },
+  "keywords": ["node", "cli", "stream", "parser", "typescript"],
+  "author": "ivanbogdan-git",
+  "license": "ISC",
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
+    "@types/node": "^20.11.20",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.7",
+    "standard-version": "^9.5.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3",
+    "vitest": "^1.3.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,js,json,md}": "biome check --write"
+  }
+}

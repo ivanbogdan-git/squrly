@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Commit message format validation for Conventional Commits
+# Format: <type>[optional scope]: <description>
+# Example: feat(parser): add URL extraction
+
+commit_regex='^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\(.+\))?: .{1,}'
+
+if ! grep -qE "$commit_regex" "$1"; then
+    echo "❌ Error: Invalid commit message format!"
+    echo ""
+    echo "📝 Your commit message should follow Conventional Commits:"
+    echo "   <type>[optional scope]: <description>"
+    echo ""
+    echo "🔧 Types: build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test"
+    echo ""
+    echo "✅ Examples:"
+    echo "   feat(parser): add URL extraction"
+    echo "   fix: resolve memory leak in fetch loop"
+    echo "   docs: update README installation steps"
+    echo "   style: format code with Biome"
+    echo ""
+    exit 1
+fi
+
+echo "✅ Commit message follows Conventional Commits format"
+
