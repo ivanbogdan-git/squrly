@@ -1,4 +1,8 @@
-# URL Parser CLI
+# Squrly
+
+[![NPM Version](https://img.shields.io/npm/v/squrly)](https://www.npmjs.com/package/squrly)
+[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+[![NPM Downloads](https://img.shields.io/npm/dm/squrly)](https://www.npmjs.com/package/squrly)
 
 A Node.js command-line tool that parses a file or stdin for URLs enclosed in square brackets, fetches them, extracts key information, and outputs the results as JSON.
 
