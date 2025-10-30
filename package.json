@@ -1,5 +1,5 @@
 {
-  "name": "url-parser-cli",
+  "name": "squrly",
   "version": "0.1.0",
   "description": "A Node.js CLI to parse, fetch, and process URLs from a text file or stdin.",
   "type": "module",
@@ -7,7 +7,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "bin": {
-    "parse-urls": "./dist/index.mjs"
+    "parse-urls": "./dist/cli.js"
   },
   "exports": {
     ".": {
@@ -18,14 +18,15 @@
   "files": ["dist"],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "build": "tsup --dts-resolve",
     "prepublishOnly": "npm run build",
-    "test": "vitest run",
+    "test": "pnpm build && vitest run",
     "test:watch": "vitest",
+    "coverage": "pnpm build && vitest run --coverage",
     "format": "biome format --write .",
     "lint": "biome lint .",
     "check": "biome check --write .",
-    "start": "node dist/index.mjs",
+    "start": "node dist/cli.js",
     "prepare": "husky",
     "release": "standard-version",
     "release:minor": "standard-version --release-as minor",
@@ -38,6 +39,8 @@
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
     "@types/node": "^20.11.20",
+    "@vitest/coverage-v8": "^1.6.1",
+    "dotenv": "^16.4.5",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.7",
     "standard-version": "^9.5.0",

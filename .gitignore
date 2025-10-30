@@ -1,18 +1,14 @@
-# Node
-node_modules/
-pnpm-lock.yaml
+# Dependencies
+node_modules
 
-# Build artifacts
-dist/
-build/
-.tsup/
+# Environment variables
+.env
 
-# Logs
-logs/
-*.log
-npm-debug.log*
-pnpm-debug.log*
+# Build output
+dist
 
-# OS
-.DS_Store
-Thumbs.db
+# PNPM
+.pnpm-store
+
+# Logs and Reports
+coverage/
