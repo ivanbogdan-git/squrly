@@ -1,6 +1,6 @@
 {
   "name": "squrly",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Node.js CLI to parse, fetch, and process URLs from a text file or stdin.",
   "type": "module",
   "main": "dist/index.js",
@@ -15,7 +15,9 @@
       "require": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "build": "tsup --dts-resolve",
@@ -33,7 +35,13 @@
     "release:major": "standard-version --release-as major",
     "release:patch": "standard-version --release-as patch"
   },
-  "keywords": ["node", "cli", "stream", "parser", "typescript"],
+  "keywords": [
+    "node",
+    "cli",
+    "stream",
+    "parser",
+    "typescript"
+  ],
   "author": "ivanbogdan-git",
   "license": "ISC",
   "devDependencies": {
