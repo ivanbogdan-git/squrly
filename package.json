@@ -7,7 +7,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "bin": {
-    "parse-urls": "./dist/cli.js"
+    "squrly": "./dist/cli.js"
   },
   "exports": {
     ".": {
