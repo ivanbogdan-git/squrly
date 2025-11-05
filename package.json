@@ -15,9 +15,7 @@
       "require": "./dist/index.js"
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "build": "tsup --dts-resolve",
@@ -35,15 +33,12 @@
     "release:major": "standard-version --release-as major",
     "release:patch": "standard-version --release-as patch"
   },
-  "keywords": [
-    "node",
-    "cli",
-    "stream",
-    "parser",
-    "typescript"
-  ],
+  "keywords": ["node", "cli", "stream", "parser", "typescript"],
   "author": "ivanbogdan-git",
   "license": "ISC",
+  "dependencies": {
+    "node-html-parser": "^7.0.1"
+  },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
     "@types/node": "^20.11.20",

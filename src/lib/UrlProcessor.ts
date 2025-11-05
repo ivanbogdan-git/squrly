@@ -3,6 +3,7 @@ import * as http from 'http';
 import * as https from 'https';
 import { Transform } from 'stream';
 import { URL } from 'url';
+import { parse } from 'node-html-parser';
 import type { OutputData } from './types.js';
 
 /**
@@ -25,9 +26,6 @@ const LAST_URL_REGEX =
 
 // Simple regex for the first email
 const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
-
-// Simple regex for the title tag
-const TITLE_REGEX = /<title>(.*?)<\/title>/is;
 
 /**
  * A Transform stream that receives bracketed content (e.g., "[text www.url.com]"),
@@ -156,12 +154,21 @@ export class UrlProcessor extends Transform {
     try {
       const body = await this.fetchWithRetry(urlStr);
 
-      // We got a body, try to parse it
-      const titleMatch = body.match(TITLE_REGEX);
-      if (titleMatch?.[1]) {
-        output.title = titleMatch[1].trim();
+      // Parse the HTML using node-html-parser
+      const root = parse(body);
+
+      // Extract title from the <title> tag
+      const titleElement = root.querySelector('title');
+      if (titleElement) {
+        const titleText = titleElement.textContent.trim();
+        if (titleText) {
+          output.title = titleText;
+        }
       }
 
+      // Extract email from the raw HTML body using regex
+      // This maintains backward compatibility with the original regex-based approach
+      // while still benefiting from the HTML parser for title extraction
       const emailMatch = body.match(EMAIL_REGEX);
       if (emailMatch?.[0]) {
         output.email = this.hashEmail(emailMatch[0]);
