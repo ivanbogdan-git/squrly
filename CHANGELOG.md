@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/ivanbogdan-git/squrly/compare/v1.0.3...v1.1.0) (2025-11-05)
+
+
+### Features
+
+* **processor:** replace regex with node-html-parser for title extraction ([cd733fd](https://github.com/ivanbogdan-git/squrly/commit/cd733fd3c87a60534cb796a911e11cc624af3e8b))
+
 ### [1.0.3](https://github.com/ivanbogdan-git/squrly/compare/v1.0.2...v1.0.3) (2025-10-30)
 
 ### [1.0.2](https://github.com/ivanbogdan-git/squrly/compare/v1.0.1...v1.0.2) (2025-10-30)
