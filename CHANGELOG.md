@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/ivanbogdan-git/squrly/compare/v1.2.1...v1.3.0) (2025-11-05)
+
+
+### Features
+
+* **processor:** implement non-blocking retries and improve code quality ([36321dd](https://github.com/ivanbogdan-git/squrly/commit/36321dd0a1c2d4cf2699182e568fd1291c09ef64))
+
 ### [1.2.1](https://github.com/ivanbogdan-git/squrly/compare/v1.2.0...v1.2.1) (2025-11-05)
 
 ## [1.2.0](https://github.com/ivanbogdan-git/squrly/compare/v1.1.0...v1.2.0) (2025-11-05)
