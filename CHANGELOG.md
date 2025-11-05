@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/ivanbogdan-git/squrly/compare/v1.1.0...v1.2.0) (2025-11-05)
+
+
+### Features
+
+* **processor:** modernize network layer with native fetch API ([4bae4f7](https://github.com/ivanbogdan-git/squrly/commit/4bae4f7d8473cec15a827376f728715c7a18dc5e))
+
 ## [1.1.0](https://github.com/ivanbogdan-git/squrly/compare/v1.0.3...v1.1.0) (2025-11-05)
 
 
