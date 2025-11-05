@@ -1,4 +1,4 @@
-# Squrly
+# 🐿️ Squrly
 
 [![NPM Version](https://img.shields.io/npm/v/squrly)](https://www.npmjs.com/package/squrly)
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
