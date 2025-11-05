@@ -1,8 +1,5 @@
 import * as crypto from 'crypto';
-import * as http from 'http';
-import * as https from 'https';
 import { Transform } from 'stream';
-import { URL } from 'url';
 import { parse } from 'node-html-parser';
 import type { OutputData } from './types.js';
 
@@ -210,88 +207,50 @@ export class UrlProcessor extends Transform {
   }
 
   /**
-   * Performs a single HTTP(S) GET request for the given URL.
+   * Performs a single HTTP(S) GET request for the given URL using native fetch.
    * @param urlStr The URL to fetch.
    * @param isRetry A flag to indicate if this is a retry attempt, used for fallback logic.
    * @returns A promise that resolves with the response body as a string.
    */
-  private fetch(
-    urlStr: string,
-    isRetry = false,
-    redirectCount = 0
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const client = urlStr.startsWith('https') ? https : http;
-      const parsedUrl = new URL(urlStr);
+  private async fetch(urlStr: string, isRetry = false): Promise<string> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
 
-      const options = {
-        hostname: parsedUrl.hostname,
-        port: parsedUrl.port,
-        path: parsedUrl.pathname + parsedUrl.search,
-        method: 'GET',
+    try {
+      const response = await fetch(urlStr, {
+        signal: controller.signal,
         headers: {
-          'User-Agent': 'Node.js-Url-Parser-CLI/0.1.0',
+          'User-Agent': 'squrly/1.1.0',
         },
-      };
-
-      const req = client.get(options, (res) => {
-        const { statusCode, headers } = res;
-
-        // Handle redirects
-        if (
-          statusCode &&
-          statusCode >= 300 &&
-          statusCode < 400 &&
-          headers.location
-        ) {
-          if (redirectCount >= 5) {
-            // Prevent infinite redirect loops
-            return reject(new Error('Exceeded maximum redirect limit'));
-          }
-          // Consume the response data to free up memory
-          res.resume();
-          // Resolve the new URL against the original to handle relative redirects
-          const newUrl = new URL(headers.location, urlStr);
-          // Recursively call fetch with the new URL
-          this.fetch(newUrl.href, isRetry, redirectCount + 1)
-            .then(resolve)
-            .catch(reject);
-          return;
-        }
-
-        if (!statusCode || statusCode < 200 || statusCode >= 300) {
-          return reject(
-            new Error(`Request Failed. Status Code: ${statusCode}`)
-          );
-        }
-
-        let rawData = '';
-        res.setEncoding('utf8');
-        res.on('data', (chunk) => {
-          rawData += chunk;
-        });
-        res.on('end', () => {
-          resolve(rawData);
-        });
+        redirect: 'follow', // Follow redirects automatically (default limit is ~20)
       });
 
-      req.on('error', (e) => {
-        // Handle low-level network errors (e.g., DNS resolution failed)
-        // Try falling back to http if https failed (e.g., self-signed cert)
-        if (
-          !isRetry &&
-          urlStr.startsWith('https://') &&
-          e.message.includes('certificate')
-        ) {
-          const httpUrl = urlStr.replace('https://', 'http://');
-          this.fetch(httpUrl, true).then(resolve).catch(reject);
-        } else {
-          reject(e);
-        }
-      });
+      if (!response.ok) {
+        throw new Error(`Request Failed. Status Code: ${response.status}`);
+      }
 
-      req.end();
-    });
+      return await response.text();
+    } catch (error) {
+      clearTimeout(timeoutId);
+
+      // Handle certificate errors by falling back to HTTP
+      // This preserves the original behavior for self-signed certificates
+      if (
+        !isRetry &&
+        urlStr.startsWith('https://') &&
+        error instanceof Error &&
+        (error.message.includes('certificate') ||
+          error.message.includes('cert') ||
+          error.name === 'TypeError')
+      ) {
+        const httpUrl = urlStr.replace('https://', 'http://');
+        return this.fetch(httpUrl, true);
+      }
+
+      throw error;
+    } finally {
+      clearTimeout(timeoutId);
+    }
   }
 
   /**
