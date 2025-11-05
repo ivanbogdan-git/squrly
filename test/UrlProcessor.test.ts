@@ -241,14 +241,26 @@ describe('UrlProcessor', () => {
       .mockResolvedValueOnce(mockFetchResponse('Server Error', 503))
       .mockResolvedValueOnce(mockFetchResponse('Server Error', 503));
 
+    // Set NODE_ENV to test to get shorter retry delay
+    const originalEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'test';
+
     const processor = new UrlProcessor('secret');
     const results = await testStreamProcessor(processor, ['[www.fail.com]']);
+
+    // Restore NODE_ENV
+    process.env.NODE_ENV = originalEnv;
 
     expect(results).toHaveLength(1); // Still outputs the base {url: '...'}
     expect(results[0].title).toBeUndefined();
     expect(global.fetch).toHaveBeenCalledTimes(2); // Was called twice
+    // Check for retry scheduled message (with test delay)
     expect(stderrSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Failed to fetch https://www.fail.com')
+      expect.stringContaining('[RETRY SCHEDULED] https://www.fail.com in 10ms')
+    );
+    // Check for final failure message
+    expect(stderrSpy).toHaveBeenCalledWith(
+      expect.stringContaining('[FINAL FAILED] https://www.fail.com')
     );
 
     stderrSpy.mockRestore();

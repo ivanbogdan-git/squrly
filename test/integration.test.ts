@@ -50,7 +50,7 @@ function runScript(
   return new Promise((resolve) => {
     const command = `node ${SCRIPT_PATH} ${args.join(' ')}`;
     const child = exec(command, {
-      env: { ...process.env, IM_SECRET: SECRET },
+      env: { ...process.env, IM_SECRET: SECRET }, // NODE_ENV will be included from process.env
     });
 
     let stdout = '';
@@ -192,14 +192,19 @@ describe('CLI Integration Tests', () => {
 
     // 3. Run the script
     // NOTE: We shorten the retry delay via env var for the test
+    const originalEnv = process.env.NODE_ENV;
     process.env.NODE_ENV = 'test';
     const { stdout, stderr } = await runScript([], inputData);
-    process.env.NODE_ENV = undefined;
+    process.env.NODE_ENV = originalEnv;
 
     // 4. Assertions
+    // Check stderr for the retry scheduled message
+    expect(stderr).toContain(
+      '[RETRY SCHEDULED] http://localhost:8080/www.fail.com in 10ms'
+    );
     // Check stderr for the final failure log
     expect(stderr).toContain(
-      'Failed to fetch http://localhost:8080/www.fail.com'
+      '[FINAL FAILED] http://localhost:8080/www.fail.com'
     );
     // Ensure no error was logged for the successful retry
     expect(stderr).not.toContain('www.retry.com');
