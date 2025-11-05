@@ -1,6 +1,6 @@
 {
   "name": "squrly",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A Node.js CLI to parse, fetch, and process URLs from a text file or stdin.",
   "type": "module",
   "main": "dist/index.js",
